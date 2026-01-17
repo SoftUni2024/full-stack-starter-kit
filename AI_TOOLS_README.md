@@ -254,6 +254,128 @@ Route::middleware(['auth:sanctum', 'role:frontend,backend'])->group(function () 
 });
 ```
 
+## 🤖 AI Agents Documentation
+
+### Development Agent
+
+The Development Agent is an AI assistant specialized in full-stack development tasks.
+
+#### Initial Setup Prompts
+
+```markdown
+# Development Agent - Initial Prompt
+
+You are a Development Agent for the AI Tools Management Platform.
+
+## Your Capabilities:
+- Full-stack development (Next.js, Laravel, Docker)
+- Code review and optimization
+- Security analysis
+- Performance monitoring
+- Database management
+- API development
+
+## Project Context:
+- Frontend: Next.js 15.4.6 + React 19 + TypeScript + Tailwind CSS
+- Backend: Laravel 12 + PHP 8.2 + MySQL 8.0 + Redis 7
+- Infrastructure: Docker Compose + Nginx
+- Authentication: Laravel Sanctum + 2FA
+- Features: Role-based access, ratings, comments, audit logs
+
+## Your Tasks:
+1. Code review and suggestions
+2. Bug identification and fixes
+3. Performance optimization
+4. Security vulnerability assessment
+5. Architecture improvements
+6. Documentation updates
+
+## Response Format:
+Always provide:
+- Clear problem analysis
+- Step-by-step solutions
+- Code examples with explanations
+- Best practices recommendations
+- Security considerations
+- Testing suggestions
+```
+
+#### Specialized Agent Prompts
+
+**Code Review Agent:**
+```markdown
+# Code Review Agent
+
+Focus on:
+- Security vulnerabilities (XSS, SQL injection, CSRF)
+- Performance bottlenecks
+- Code quality and maintainability
+- TypeScript type safety
+- Laravel best practices
+- Database query optimization
+```
+
+**Security Agent:**
+```markdown
+# Security Agent
+
+Analyze for:
+- Authentication and authorization flaws
+- Input validation issues
+- Data exposure risks
+- API security vulnerabilities
+- Docker security configurations
+- Environment variable security
+```
+
+**Performance Agent:**
+```markdown
+# Performance Agent
+
+Monitor and optimize:
+- Database query performance
+- Frontend bundle size
+- API response times
+- Caching strategies
+- Memory usage
+- Docker container efficiency
+```
+
+### Agent Integration Examples
+
+#### GitHub Actions Integration
+```yaml
+# .github/workflows/ai-review.yml
+name: AI Code Review
+on: [pull_request]
+jobs:
+  ai-review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: AI Code Review
+        run: |
+          curl -X POST ${{ secrets.AI_AGENT_URL }}/review \
+            -H "Authorization: Bearer ${{ secrets.AI_TOKEN }}" \
+            -d @changes.diff
+```
+
+#### Slack Bot Integration
+```javascript
+// Slack bot for AI agent notifications
+const { App } = require('@slack/bolt');
+
+const app = new App({
+  token: process.env.SLACK_BOT_TOKEN,
+  signingSecret: process.env.SLACK_SIGNING_SECRET
+});
+
+app.message('review code', async ({ message, say }) => {
+  const review = await aiAgent.reviewCode(message.text);
+  await say(`🤖 AI Review: ${review.summary}`);
+});
+```
+
 ## 💬 Comments & Ratings System
 
 ### Features
@@ -268,23 +390,23 @@ Route::middleware(['auth:sanctum', 'role:frontend,backend'])->group(function () 
 
 ```bash
 # Get tool ratings
-GET /api/tools/{id}/ratings?sort=recent&min_rating=4
+GET /api/tools/{toolId}/ratings?sort=recent&min_rating=4
 
 # Submit rating
-POST /api/tools/{id}/rate
+POST /api/tools/{toolId}/rate
 {
   "rating": 5,
   "comment": "Excellent tool for development!"
 }
 
 # Mark rating as helpful
-POST /api/ratings/{id}/helpful
+POST /api/ratings/{ratingId}/helpful
 
 # Delete rating (owner or admin only)
-DELETE /api/ratings/{id}
+DELETE /api/ratings/{ratingId}
 
 # Get tool statistics
-GET /api/tools/{id}/stats
+GET /api/tools/{toolId}/stats
 ```
 
 ### Frontend Components
@@ -424,8 +546,6 @@ cp .env.example .env
 ## 📚 Additional Resources
 
 ### Documentation Files
-- [AI_AGENT_PROMPTS.md](./AI_AGENT_PROMPTS.md) - AI agent setup and prompts
-- [TROUBLESHOOTING_GUIDE.md](./TROUBLESHOOTING_GUIDE.md) - Common issues and solutions
 - [PHASE4_FINAL_SUMMARY.md](./PHASE4_FINAL_SUMMARY.md) - Project overview
 - [UI_UX_ENHANCEMENTS.md](./UI_UX_ENHANCEMENTS.md) - UI/UX documentation
 - [PHASE4_IMPLEMENTATION_GUIDE.md](./PHASE4_IMPLEMENTATION_GUIDE.md) - Implementation guide
@@ -439,5 +559,5 @@ cp .env.example .env
 ---
 
 **Last Updated**: 2026-01-17  
-**Version**: 4.1.0  
+**Version**: 4.0.0  
 **License**: MIT
